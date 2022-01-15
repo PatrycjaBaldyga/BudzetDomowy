@@ -1,0 +1,168 @@
+{% extends 'budget/base.html' %}
+{% block content %}
+
+<div class="container">
+
+    <!-- kafelki z sumą wpływów i wydatków -->
+    <section class="section section-cards">
+
+        <div class="row">
+            
+            <h5>W tym miesiącu:</h5>
+
+            <div class="col s12 m6 14">
+                <div class="card-panel">
+                    <h6>Wpływy</h6>
+                    <h1>{{ stats.monthly_income }}zł</h1>
+                </div>
+            </div>
+
+            <div class="col s12 m6 14">
+                <div class="card-panel">
+                    <h6>Wydatki</h6>
+                    <h1>{{ stats.monthly_expenses }}zł</h1>
+                </div>
+            </div>
+            
+        </div>
+
+    </section>
+
+    <section class="section section-expenses">
+
+        <!-- przycisk dodawania -->
+        <div class="row">
+            <button class="btn waves-effect left modal-trigger" href="#itemModal">Dodaj</button>
+        </div>
+
+        <!-- formularz dodawania -->
+        <div id="itemModal" class="modal">
+            <div class="modal-content">
+        
+                <form method="POST">
+                    {% csrf_token %}
+                <!-- wpisywanie nazwy-->
+                    <label for="title">Nazwa</label>
+                    <input name="title" id="title" required>
+
+                </br>
+                <!-- wpisywanie kwoty-->
+                    <label for="amount">Kwota</label>
+                    <input type="number" step="0.01" min=0 name="amount" id="amount" required>
+                </br>
+                <!-- wybieranie wydatek/wpływ radio-->
+                <label for="type">
+                  <input id="type" name="type" type="radio" value="Wydatek" required/>
+                  <span>Wydatek</span>
+                </label>
+
+                <label for="type">
+                  <input id="type" name="type" type="radio" value="Wpływ"/>
+                  <span>Wpływ</span>
+                </label>
+                <!-- wybieranie kategorii z listy wysuwanej-->
+                <div class="input-field">
+                    <select class="category" name="category" required>
+                        <option value="Jedzenie">Jedzenie</option>
+                        <option value="Podróże">Podróże</option>
+                        <option value="Zakupy">Zakupy</option>
+                        <option value="Rachunki">Rachunki</option>
+                        <option value="Rozrywka">Rozrywka</option>
+                        <option value="Wpływ">Wpływ</option>
+                        <option value="Inne">Inne</option>
+                    </select>
+                    <label>Kategoria</label>
+                </div>
+                    <!-- wybieranie daty-->
+                    <label for="date">Data</label>
+                    <input type="date" name="date" id="date" required>
+                    <!-- przycisk dodaj-->
+                    <button type="submit" class="btn" href='/index/'>Dodaj</button>
+                </form>
+            </div>
+        </div>
+
+    </br>
+        <!-- tabela z itemami (wydatki+wpływy) -->
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Kwota</th>
+                    <th>Kategoria</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- wyświetla wszystkie rekordy z podziałem na strony -->
+            {% for item in page_obj %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>
+                    <!-- jeśli wydatek to kwota na zielono, jak wpływ to na czerwono -->
+                    {% if item.type == "Wydatek" %}
+                        <span style="color:red">-{{ item.amount }} zł</span>
+                    {% else %}
+                        <span style="color:green">+{{ item.amount }} zł</span>
+                    {% endif %}
+                    </td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.date }}</td>
+                    <!-- przycisk usuwania -->
+                    <td><a onclick="item_delete(this)" data-id="{{ item.id }}"><i class="waves-effect waves-light btn-small">Usuń</i></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </br>
+        <!-- paginacja -->
+        <div class="pagination-container">
+            <div class="">
+              Strona {{page_obj.number}} z {{ page_obj.paginator.num_pages }}
+            </div>
+            <ul class="pagination right-align">
+                {% if page_obj.has_previous %}
+                <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">1</a></li>
+                <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Poprzednia</a></li>
+                {% endif %}
+        
+                {% if page_obj.has_next %}
+                <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Następna</a></li>
+                <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+//inicjalizacja okienka i listy rozwijanej z Materializecss
+var elem = document.querySelector('.modal')
+var instance = M.Modal.init(elem)
+
+var elem = document.querySelector('select')
+var instance = M.FormSelect.init(elem)
+
+//funkcja do usuwania rekordu z historii
+function item_delete(e){
+
+    let id = e.dataset.id
+    e.closest('tr').remove()
+
+    fetch('', {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            'id': id
+        }),
+        credentials: 'same-origin',
+    })
+}
+</script>
+
+{% endblock %}

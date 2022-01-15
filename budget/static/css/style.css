@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+/* ogólne */
+html {
+    font-family: 'Montserrat';
+    background-color: #f1f1f1;
+}
+.bold {
+    font-weight: bold;
+}
+
+/*  panele górne */
+.section-cards h1 {
+    font-size: 4vw;
+    margin: 15px 0px;
+}
+
+@media(max-width: 992px){
+    .section-cards h1 {
+        font-size: calc(16px + 6vw);
+    }
+}
+.row {
+    margin: 0!important;
+}
+
+/* sekcja wydatków */
+.section-expenses button {
+    padding: 0px 40px;
+    font-weight: bold;
+    text-shadow: 0px 3px 4px rgba(0, 0, 0, .25);
+}
+
+.section-expenses .expense {
+    font-size: 16px;
+    border-radius: 0;
+    margin: 0;
+}
+
+.section-expenses .expense .category {
+    font-size: 13px;
+}
+.section-expenses li:nth-child(even) .expense {
+    background-color: #f2f2f2;
+}
