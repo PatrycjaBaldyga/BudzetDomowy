@@ -3,7 +3,9 @@
 
 <div class="container">
 
-    <!-- kafelki z sumą wpływów i wydatków -->
+<h3>Budżet Domowy</h3>
+    
+<!-- kafelki z sumą wpływów i wydatków 
     <section class="section section-cards">
 
         <div class="row">
@@ -13,20 +15,21 @@
             <div class="col s12 m6 14">
                 <div class="card-panel">
                     <h6>Wpływy</h6>
-                    <h1>{{ stats.monthly_income }}zł</h1>
+                    <h1>zł</h1>
                 </div>
             </div>
 
             <div class="col s12 m6 14">
                 <div class="card-panel">
                     <h6>Wydatki</h6>
-                    <h1>{{ stats.monthly_expenses }}zł</h1>
+                    <h1>{{ incomeexpense_info }}zł</h1>
                 </div>
             </div>
             
         </div>
 
     </section>
+-->
 
     <section class="section section-expenses">
 
@@ -163,6 +166,7 @@ function item_delete(e){
         credentials: 'same-origin',
     })
 }
+
 </script>
 
 {% endblock %}
