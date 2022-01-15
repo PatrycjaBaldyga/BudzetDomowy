@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 def index(request):
     
     #jeżeli metoda get to wyświetl obiekty (+paginacja)
-    if request.method == "GET":
+    if request.method == "GET":       
         incomeexpense_info = IncomeExpense_Info.objects.order_by('-date')
         paginator = Paginator(incomeexpense_info, 10)
         page_number = request.GET.get('page')
@@ -43,3 +43,5 @@ def index(request):
         return HttpResponse('')
     
     return HttpResponseRedirect('')
+
+    
