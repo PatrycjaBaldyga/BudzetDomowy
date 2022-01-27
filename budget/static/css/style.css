@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
-/* ogólne */
+/* general */
 html {
     font-family: 'Montserrat';
     background-color: #f1f1f1;
@@ -9,7 +9,7 @@ html {
     font-weight: bold;
 }
 
-/*  panele górne */
+/*  sum cards */
 .section-cards h1 {
     font-size: 4vw;
     margin: 15px 0px;
@@ -24,7 +24,7 @@ html {
     margin: 0!important;
 }
 
-/* sekcja wydatków */
+/* expense&income section */
 .section-expenses button {
     padding: 0px 40px;
     font-weight: bold;
