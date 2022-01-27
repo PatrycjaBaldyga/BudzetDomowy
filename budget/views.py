@@ -3,10 +3,10 @@ from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from .models import IncomeExpense_Info
 from django.core.paginator import Paginator
 
-# widok strony głównej
+#home page view
 def index(request):
     
-    #jeżeli metoda get to wyświetl obiekty (+paginacja)
+    #if method is GET then display the objects (+ pagination)
     if request.method == "GET":       
         incomeexpense_info = IncomeExpense_Info.objects.order_by('-date')
         paginator = Paginator(incomeexpense_info, 10)
@@ -17,7 +17,7 @@ def index(request):
         }
         return render(request, 'budget/index.html', context)
     
-    #jeżeli metoda post to zapisz podane pola
+    #if method is POST then save the input fields
     elif request.method == "POST":
         incomeexpense_info = IncomeExpense_Info.objects.order_by('-date')
         title = request.POST["title"]
@@ -35,7 +35,7 @@ def index(request):
             }
         return render(request, 'budget/index.html', context)
     
-    #jezeli metoda delete to usuń obiekt o tym id
+    #if method is DELETE then delete an item of this id
     elif request.method == "DELETE":
         id = json.loads(request.body)['id']
         incomeexpense_info = IncomeExpense_Info.objects.get(id=id)
@@ -43,5 +43,3 @@ def index(request):
         return HttpResponse('')
     
     return HttpResponseRedirect('')
-
-    

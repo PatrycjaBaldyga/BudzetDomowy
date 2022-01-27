@@ -5,7 +5,7 @@
 
 <h3>Budżet Domowy</h3>
     
-<!-- kafelki z sumą wpływów i wydatków 
+<!-- cards with expense and income summed up 
     <section class="section section-cards">
 
         <div class="row">
@@ -33,27 +33,27 @@
 
     <section class="section section-expenses">
 
-        <!-- przycisk dodawania -->
+        <!-- add button -->
         <div class="row">
             <button class="btn waves-effect left modal-trigger" href="#itemModal">Dodaj</button>
         </div>
 
-        <!-- formularz dodawania -->
+        <!-- add form -->
         <div id="itemModal" class="modal">
             <div class="modal-content">
         
                 <form method="POST">
                     {% csrf_token %}
-                <!-- wpisywanie nazwy-->
+                <!-- entry title -->
                     <label for="title">Nazwa</label>
                     <input name="title" id="title" required>
 
                 </br>
-                <!-- wpisywanie kwoty-->
+                <!-- entry amount -->
                     <label for="amount">Kwota</label>
                     <input type="number" step="0.01" min=0 name="amount" id="amount" required>
                 </br>
-                <!-- wybieranie wydatek/wpływ radio-->
+                <!-- choose type (income or expense) radio-->
                 <label for="type">
                   <input id="type" name="type" type="radio" value="Wydatek" required/>
                   <span>Wydatek</span>
@@ -63,7 +63,7 @@
                   <input id="type" name="type" type="radio" value="Wpływ"/>
                   <span>Wpływ</span>
                 </label>
-                <!-- wybieranie kategorii z listy wysuwanej-->
+                <!-- choose category -->
                 <div class="input-field">
                     <select class="category" name="category" required>
                         <option value="Jedzenie">Jedzenie</option>
@@ -76,17 +76,17 @@
                     </select>
                     <label>Kategoria</label>
                 </div>
-                    <!-- wybieranie daty-->
+                    <!-- choose date -->
                     <label for="date">Data</label>
                     <input type="date" name="date" id="date" required>
-                    <!-- przycisk dodaj-->
+                    <!-- submit button -->
                     <button type="submit" class="btn" href='/index/'>Dodaj</button>
                 </form>
             </div>
         </div>
 
     </br>
-        <!-- tabela z itemami (wydatki+wpływy) -->
+        <!-- displays entries in a table -->
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -97,12 +97,12 @@
                 </tr>
             </thead>
             <tbody>
-            <!-- wyświetla wszystkie rekordy z podziałem na strony -->
+            <!-- displays all records with pagination -->
             {% for item in page_obj %}
                 <tr>
                     <td>{{ item.title }}</td>
                     <td>
-                    <!-- jeśli wydatek to kwota na zielono, jak wpływ to na czerwono -->
+                    <!-- if expense then amount in red, if income then amount in green -->
                     {% if item.type == "Wydatek" %}
                         <span style="color:red">-{{ item.amount }} zł</span>
                     {% else %}
@@ -111,14 +111,14 @@
                     </td>
                     <td>{{ item.category }}</td>
                     <td>{{ item.date }}</td>
-                    <!-- przycisk usuwania -->
+                    <!-- delete button -->
                     <td><a onclick="item_delete(this)" data-id="{{ item.id }}"><i class="waves-effect waves-light btn-small">Usuń</i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </br>
-        <!-- paginacja -->
+        <!-- pagination -->
         <div class="pagination-container">
             <div class="">
               Strona {{page_obj.number}} z {{ page_obj.paginator.num_pages }}
@@ -142,14 +142,14 @@
 
 
 <script>
-//inicjalizacja okienka i listy rozwijanej z Materializecss
+//initialisation of modal and select list from Materializecss
 var elem = document.querySelector('.modal')
 var instance = M.Modal.init(elem)
 
 var elem = document.querySelector('select')
 var instance = M.FormSelect.init(elem)
 
-//funkcja do usuwania rekordu z historii
+//function to delete a record from the table
 function item_delete(e){
 
     let id = e.dataset.id

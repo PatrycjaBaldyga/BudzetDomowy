@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
+#lists of key-value tuples for choices
 SELECT_CATEGORY_CHOICES = [
     ("Jedzenie","Jedzenie"),
     ("Podróże","Podróże"),
@@ -16,6 +17,7 @@ ADD_EXPENSE_CHOICES = [
      ("Wpływ","Wpływ")
  ]
 
+#model of fields in database (income or expense)
 class IncomeExpense_Info(models.Model):
     title = models.CharField(max_length=100)
     type = models.CharField(max_length = 10 , choices = ADD_EXPENSE_CHOICES )
